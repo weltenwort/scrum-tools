@@ -11,7 +11,7 @@ import App.View
 app : StartApp.App App.Model.Model
 app =
     StartApp.start
-        { init = App.Update.init
+        { init = App.Update.init randomSeed
         , inputs = []
         , update = App.Update.update
         , view = App.View.view
@@ -26,3 +26,6 @@ main =
 port runner : Signal (Task.Task Effects.Never ())
 port runner =
     app.tasks
+
+
+port randomSeed : (Int, Int)

@@ -5,4 +5,11 @@ require( '../dist/index.html' );
 require( './styles/app.css' );
 
 var Elm = require( './Main' );
-Elm.embed(Elm.Main, document.getElementById( 'main' ));
+var target = document.getElementById('main');
+var staticPortValues = {
+    randomSeed: [
+        Math.floor(Math.random()*0xFFFFFFFF),
+        Math.floor(Math.random()*0xFFFFFFFF)
+    ]
+};
+Elm.embed(Elm.Main, target, staticPortValues);

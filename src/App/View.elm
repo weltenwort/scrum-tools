@@ -10,4 +10,4 @@ view : Signal.Address Action -> Model -> Html.Html
 view address model =
     Html.div
         []
-        []
+        [ Html.text model.id.current ]
