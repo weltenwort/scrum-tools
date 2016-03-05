@@ -3,11 +3,13 @@ module App.Update where
 import Effects exposing (Effects)
 
 import App.Model as App exposing (Model, initialModel)
+import App.Router as App exposing (Route, RouteParams, createRouter)
 import Id.Update as Id exposing (init)
 
 
 type Action
-    = Nothing
+    = NoOp
+    | ShowRoute App.Route App.RouteParams
 
 
 init : (Int, Int) -> (App.Model, Effects Action)
@@ -23,10 +25,18 @@ init randomSeed =
         )
 
 
-update : Action -> App.Model -> (Model, Effects Action)
+update : Action -> App.Model -> (App.Model, Effects Action)
 update action model =
     case action of
+        ShowRoute route _ ->
+            ( {model | route = route}
+            , Effects.none
+            )
         _ ->
             ( model
             , Effects.none
             )
+
+
+router =
+    App.createRouter ShowRoute

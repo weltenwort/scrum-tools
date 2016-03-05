@@ -4,7 +4,7 @@ import StartApp
 import Task
 
 import App.Model
-import App.Update
+import App.Update exposing (router)
 import App.View
 
 
@@ -12,7 +12,7 @@ app : StartApp.App App.Model.Model
 app =
     StartApp.start
         { init = App.Update.init randomSeed
-        , inputs = []
+        , inputs = [router.signal]
         , update = App.Update.update
         , view = App.View.view
         }
@@ -29,3 +29,8 @@ port runner =
 
 
 port randomSeed : (Int, Int)
+
+
+port routeRunTask : Task.Task () ()
+port routeRunTask =
+    router.run
