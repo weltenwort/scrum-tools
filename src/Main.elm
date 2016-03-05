@@ -13,7 +13,7 @@ app =
     StartApp.start
         { init = App.Update.init randomSeed
         , inputs = [router.signal]
-        , update = App.Update.update
+        , update = App.Update.loggedUpdate
         , view = App.View.view
         }
 

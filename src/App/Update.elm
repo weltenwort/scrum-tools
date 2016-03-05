@@ -1,5 +1,6 @@
 module App.Update where
 
+import Debug
 import Effects exposing (Effects)
 
 import App.Model as App exposing (Model, initialModel)
@@ -36,6 +37,15 @@ update action model =
             ( model
             , Effects.none
             )
+
+
+loggedUpdate : Action -> App.Model -> (App.Model, Effects Action)
+loggedUpdate action model =
+    let
+        action = Debug.log "action" action
+        model = Debug.log "model before" model
+    in
+        Debug.log "model after" (update action model)
 
 
 router =
