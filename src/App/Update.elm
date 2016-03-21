@@ -8,6 +8,8 @@ import App.Model
 import App.Router
 import Id.Action
 import Id.Update
+import Retro.Action
+import Retro.Update
 
 
 init : (Int, Int) -> (App.Model, Effects Action)
@@ -34,6 +36,11 @@ update action model =
             model
                 |> Response.withEffects (path |> App.Router.navigateTo |> Effects.map App.Action.Hop)
 
+        -- Service Actions
+        App.Action.Service (App.Action.Retro retroAction) ->
+            Retro.Update.update retroAction model.retro
+                |> Response.mapModel (\retro -> { model | retro = retro })
+                |> Response.mapEffects (App.Action.Retro >> App.Action.Service)
         App.Action.Service (App.Action.Id idAction) ->
             Id.Update.update idAction model.id
                 |> Response.mapModel (\id -> { model | id = id })
