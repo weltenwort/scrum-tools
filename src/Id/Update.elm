@@ -1,9 +1,30 @@
 module Id.Update where
 
 import Random.PCG as Random
+import Response exposing (Response)
 import Uuid.Barebones
 
+import Id.Action
 import Id.Model
+
+
+type alias IdAction = Id.Action.Action
+type alias IdModel = Id.Model.Model
+type alias IdResponse = Response IdModel IdAction
+
+
+update : IdAction -> IdModel -> IdResponse
+update action model =
+    case action of
+        Id.Action.Generate ->
+            let
+                (nextId, nextSeed) = generate model.seed
+            in
+                { model
+                | current = nextId
+                , seed = nextSeed
+                }
+                    |> Response.withNone
 
 
 init : (Int, Int) -> Id.Model.Model

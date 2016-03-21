@@ -6,6 +6,7 @@ import Effects exposing (Effects)
 import App.Action
 import App.Model
 import App.Router
+import Id.Action
 import Id.Update
 
 
@@ -30,6 +31,10 @@ update action model =
             ( {model | route = route}
             , Effects.none
             )
+        App.Action.Service (App.Action.Id idAction) ->
+            Id.Update.update idAction model.id
+                |> Response.mapModel (\id -> { model | id = id })
+                |> Response.mapEffects (App.Action.Id >> App.Action.Service)
         _ ->
             ( model
             , Effects.none
