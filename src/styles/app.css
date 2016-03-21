@@ -1,3 +1,7 @@
+@import '~bootstrap/dist/css/bootstrap.css';
+@import '~bootstrap/dist/css/bootstrap-theme.css';
+
 body {
   background-color: white;
+  padding-top: 70px;
 }
