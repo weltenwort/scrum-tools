@@ -1,7 +1,8 @@
 module App.Update where
 
 import Debug
-import Effects exposing (Effects)
+import Effects
+import Response exposing (Response)
 
 import App.Action
 import App.Model
@@ -12,7 +13,12 @@ import Retro.Action
 import Retro.Update
 
 
-init : (Int, Int) -> (App.Model, Effects Action)
+type alias AppAction = App.Action.Action
+type alias AppModel = App.Model.Model
+type alias AppResponse = Response AppModel AppAction
+
+
+init : (Int, Int) -> AppResponse
 init randomSeed =
     let
         initialId = Id.Update.init randomSeed
@@ -21,12 +27,13 @@ init randomSeed =
             | id = initialId
         }
     in
-        ( model
-        , Effects.none
-        )
+        model
+            |> Response.withNone
 
 
-update : Action -> App.Model -> (App.Model, Effects Action)
+
+
+update : AppAction -> AppModel -> AppResponse
 update action model =
     case action of
         App.Action.Route (route, _) ->
@@ -47,12 +54,11 @@ update action model =
                 |> Response.mapEffects (App.Action.Id >> App.Action.Service)
 
         _ ->
-            ( model
-            , Effects.none
-            )
+            model
+                |> Response.withNone
 
 
-loggedUpdate : Action -> App.Model -> (App.Model, Effects Action)
+loggedUpdate : AppAction -> AppModel -> AppResponse
 loggedUpdate action model =
     let
         action = Debug.log "action" action
