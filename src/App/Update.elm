@@ -27,14 +27,18 @@ init randomSeed =
 update : Action -> App.Model -> (App.Model, Effects Action)
 update action model =
     case action of
-        ShowRoute route _ ->
-            ( {model | route = route}
-            , Effects.none
-            )
+        App.Action.Route (route, _) ->
+            {model | route = route}
+                |> Response.withNone
+        App.Action.Navigation path ->
+            model
+                |> Response.withEffects (path |> App.Router.navigateTo |> Effects.map App.Action.Hop)
+
         App.Action.Service (App.Action.Id idAction) ->
             Id.Update.update idAction model.id
                 |> Response.mapModel (\id -> { model | id = id })
                 |> Response.mapEffects (App.Action.Id >> App.Action.Service)
+
         _ ->
             ( model
             , Effects.none
@@ -51,4 +55,8 @@ loggedUpdate action model =
 
 
 router =
-    App.createRouter ShowRoute
+    App.Router.createRouter
+
+
+routerSignal =
+    Signal.map App.Action.Route router.signal

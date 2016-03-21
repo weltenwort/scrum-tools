@@ -4,7 +4,7 @@ import StartApp
 import Task
 
 import App.Model
-import App.Update exposing (router)
+import App.Update exposing (router, routerSignal)
 import App.View
 
 
@@ -12,7 +12,7 @@ app : StartApp.App App.Model.Model
 app =
     StartApp.start
         { init = App.Update.init randomSeed
-        , inputs = [router.signal]
+        , inputs = [App.Update.routerSignal]
         , update = App.Update.loggedUpdate
         , view = App.View.view
         }

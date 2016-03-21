@@ -10,8 +10,8 @@ type alias Model =
     }
 
 
-initialModel : Model
-initialModel =
+initial : Model
+initial =
     { id = Id.initialModel
     , route = App.NotFound
     }
