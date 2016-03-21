@@ -3,10 +3,10 @@ module Id.Update where
 import Random.PCG as Random
 import Uuid.Barebones
 
-import Id.Model as Id exposing (Model)
+import Id.Model
 
 
-init : (Int, Int) -> Id.Model
+init : (Int, Int) -> Id.Model.Model
 init randomSeed =
     let
         (nextId, nextSeed) = randomSeed

@@ -3,20 +3,17 @@ module App.Update where
 import Debug
 import Effects exposing (Effects)
 
-import App.Model as App exposing (Model, initialModel)
-import App.Router as App exposing (Route, RouteParams, createRouter)
-import Id.Update as Id exposing (init)
-
-
-type Action
-    = NoOp
-    | ShowRoute App.Route App.RouteParams
+import App.Action
+import App.Model
+import App.Router
+import Id.Update
 
 
 init : (Int, Int) -> (App.Model, Effects Action)
 init randomSeed =
     let
-        initialId = Id.init randomSeed
+        initialId = Id.Update.init randomSeed
+        initialModel = App.Model.initial
         model = { initialModel
             | id = initialId
         }
