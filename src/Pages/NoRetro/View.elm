@@ -15,14 +15,12 @@ view address =
         navbar = Common.Navbar.view "Scrum Tools"
         content = row_
             [ colXsOffset_ 6 3
-                [ div_
-                    [ btnPrimary'
-                        "btn-block"
-                        { btnParam
-                        | label = Just "Create a new Retrospective"
-                        }
-                        address Pages.NoRetro.Update.CreateRetro
-                    ]
+                [ btnPrimary'
+                    "btn-block"
+                    { btnParam
+                    | label = Just "Create a new Retrospective"
+                    }
+                    address Pages.NoRetro.Update.CreateRetro
                 ]
             ]
     in
