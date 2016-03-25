@@ -14,5 +14,5 @@ initial : String -> Model
 initial id =
     { activities = []
     , id = id
-    , name = "Unnamed Retro"
+    , name = "Unnamed Retrospective"
     }
