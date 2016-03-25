@@ -18,7 +18,7 @@ view address model =
         App.Router.RetroOverview _ ->
             Pages.Retro.View.view model.retro
         _ ->
-            Pages.NoRetro.View.view (Signal.forwardTo address tagPageNoRetroAction)
+            Pages.NoRetro.View.view (Signal.forwardTo address tagNoRetroPageAction)
 
 
-tagPageNoRetroAction = App.Action.NoRetro >> App.Action.Page
+tagNoRetroPageAction = App.Action.NoRetroPage >> App.Action.Page

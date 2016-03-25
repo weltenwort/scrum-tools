@@ -58,7 +58,7 @@ update action model =
                     |> Response.mapEffects (App.Action.Id >> App.Action.Service)
 
             -- Page Actions
-            App.Action.Page (App.Action.NoRetro createRetro) ->
+            App.Action.Page (App.Action.NoRetroPage createRetro) ->
                 model
                     |> Response.withNone
                     :> update (Retro.Action.Create model.id.current |> App.Action.Retro |> App.Action.Service)

@@ -11,7 +11,7 @@ type ServiceAction
     | Id Id.Action.Action
 
 type PageAction
-    = NoRetro Pages.NoRetro.Update.Action
+    = NoRetroPage Pages.NoRetro.Update.Action
 
 type Action
     = NoOp
