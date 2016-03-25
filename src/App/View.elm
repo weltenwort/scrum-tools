@@ -16,9 +16,10 @@ view : Signal.Address App.Action.Action -> App.Model.Model -> Html
 view address model =
     case model.route of
         App.Router.RetroOverview _ ->
-            Pages.Retro.View.view model.retro
+            Pages.Retro.View.view (Signal.forwardTo address tagRetroPageAction) model.retro
         _ ->
             Pages.NoRetro.View.view (Signal.forwardTo address tagNoRetroPageAction)
 
 
 tagNoRetroPageAction = App.Action.NoRetroPage >> App.Action.Page
+tagRetroPageAction = App.Action.RetroPage >> App.Action.Page
