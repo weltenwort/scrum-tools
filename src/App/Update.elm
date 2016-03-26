@@ -11,6 +11,7 @@ import App.Router
 import Id.Action
 import Id.Update
 import Pages.NoRetro.Update
+import Pages.Retro.Action
 import Retro.Action
 import Retro.Update
 
@@ -37,6 +38,7 @@ update : AppAction -> AppModel -> AppResponse
 update action model =
     let
         createRetro = Pages.NoRetro.Update.CreateRetro
+        addActivity = Pages.Retro.Action.AddActivity
     in
         case action of
             -- Route Actions
@@ -64,6 +66,11 @@ update action model =
                     :> update (Retro.Action.Create model.id.current |> App.Action.Retro |> App.Action.Service)
                     :> update (Id.Action.Generate |> App.Action.Id |> App.Action.Service)
                     :> update ("/" ++ model.id.current |> App.Action.Navigation)
+            App.Action.Page (App.Action.RetroPage addActivity) ->
+                model
+                    |> Response.withNone
+                    :> update (Retro.Action.AddActivity model.id.current |> App.Action.Retro |> App.Action.Service)
+                    :> update (Id.Action.Generate |> App.Action.Id |> App.Action.Service)
 
             _ ->
                 model
