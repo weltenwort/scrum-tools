@@ -23,13 +23,22 @@ viewRetro address retro =
     let
         navbar = Common.Navbar.view retro.name
         content = row_
-            [ colXsOffset_ 6 3
-                [ btnPrimary'
-                    "btn-block"
-                    { btnParam
-                    | label = Just "Add a new Activity"
-                    }
-                    address Pages.Retro.Action.AddActivity
+            [ colXs_ 12
+                [ row_
+                    [ colXs_ 12
+                        [ viewActivities retro.activities
+                        ]
+                    ]
+                , row_
+                    [ colXs_ 12
+                        [ btnPrimary'
+                            "btn-block"
+                            { btnParam
+                            | label = Just "Add a new Activity"
+                            }
+                            address Pages.Retro.Action.AddActivity
+                        ]
+                    ]
                 ]
             ]
     in
@@ -37,12 +46,28 @@ viewRetro address retro =
 
 
 viewActivities activities =
-    div_
-        (List.map viewActivityEntry activities)
+    div'
+        { class = "list-group"
+        }
+        (List.map viewActivity activities)
 
 
-viewActivityEntry activity =
-    text activity.name
+viewActivity activity =
+    a'
+        { class = "list-group-item"
+        , href = "#"
+        }
+        [ h4'
+            { class = "list-group-item-heading"
+            }
+            [ text activity.name
+            ]
+        , p'
+            { class = "list-group-item-text"
+            }
+            [ text "Unknown type"
+            ]
+        ]
 
 
 viewLoading =
