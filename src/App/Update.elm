@@ -65,7 +65,7 @@ update action model =
                     |> Response.withNone
                     :> update (Retro.Action.Create model.id.current |> App.Action.Retro |> App.Action.Service)
                     :> update (Id.Action.Generate |> App.Action.Id |> App.Action.Service)
-                    :> update ("/" ++ model.id.current |> App.Action.Navigation)
+                    :> update ("/retro/" ++ model.id.current |> App.Action.Navigation)
             App.Action.Page (App.Action.RetroPage addActivity) ->
                 model
                     |> Response.withNone

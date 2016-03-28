@@ -19,7 +19,7 @@ type Route
 matchers : List (Hop.Types.PathMatcher Route)
 matchers =
     [ Hop.Matchers.match1 NoRetro "/"
-    , Hop.Matchers.match2 RetroOverview "/" Hop.Matchers.str
+    , Hop.Matchers.match2 RetroOverview "/retro/" Hop.Matchers.str
     ]
 
 
