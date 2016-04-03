@@ -1,0 +1,5 @@
+{
+    "address": "::1",
+    "port": 8081,
+    "retrospectives_db": "../retrospectives.db"
+}

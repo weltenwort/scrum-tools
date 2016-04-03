@@ -22,7 +22,7 @@ var commonConfig = {
   entry: './src/index.js',
 
   output: {
-    path:     './dist',
+    path:     __dirname + '/dist',
     filename: 'bundle.js'
   },
 
@@ -46,10 +46,17 @@ var commonConfig = {
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         loader: 'file'
+      },
+      {
+        test: /\.(json)$/,
+        loader: 'json'
       }
     ],
 
-    noParse: /\.elm$/
+    noParse: [
+        /\.elm$/,
+        /socket.io-client\/socket.io.js$/
+    ]
   }
 }
 
