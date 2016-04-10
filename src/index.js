@@ -1,11 +1,7 @@
-// Main entrypoint file
-require( '../dist/index.html' );
-
-// pull in desired CSS/SASS files
 require( './styles/app.css' );
 
 var Elm = require( './Main' );
-var target = document.getElementById('main');
+var target = document.getElementById(env.elmMountId);
 var staticPortValues = {
     randomSeed: [
         Math.floor(Math.random()*0xFFFFFFFF),

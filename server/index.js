@@ -12,7 +12,7 @@ const CONFIG_DIRECTORY = (!!process.env.ST_CONFIG_DIRECTORY
     ? process.env.ST_CONFIG_DIRECTORY
     : __dirname + "/.."
 );
-const isProductionEnv = (app) => app.get('env') !== 'production'
+const isProductionEnv = (app) => app.get('env') === 'production'
 
 const app = feathers()
     .configure(configuration(CONFIG_DIRECTORY))
@@ -20,11 +20,8 @@ const app = feathers()
     .use(morgan('combined'))
     .use(bodyParser.json());
 
-if (isProductionEnv) {
+if (!isProductionEnv(app)) {
     createDebug.enable('scrumTools:*');
-
-    const createDevMiddleware = require('./webpackMiddleware');
-    app.use(createDevMiddleware());
 }
 
 const logHttp = createDebug('scrumTools:http')
@@ -35,6 +32,10 @@ app.use('/retrospectives', feathersNedb({
         autoload: true
     })
 }));
+
+if (!isProductionEnv(app)) {
+    app.use('/', feathers.static(app.get('assets_directory')));
+}
 
 const server = app.listen(
     app.get('port'),

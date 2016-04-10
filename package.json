@@ -6,7 +6,8 @@
     "build": "webpack",
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "watchServer": "webpack-dev-server --port 8080"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,8 @@
     "extract-text-webpack-plugin": "1.0.1",
     "feathers": "2.0.0",
     "file-loader": "0.8.5",
+    "html-webpack-plugin": "2.15.0",
+    "html-webpack-template": "4.0.0",
     "json-loader": "0.5.4",
     "lodash": "4.6.1",
     "node-sass": "3.4.2",
@@ -35,12 +38,9 @@
     "sass-loader": "3.1.2",
     "socket.io-client": "1.4.5",
     "style-loader": "0.13.0",
-    "swig": "1.4.2",
     "webpack": "1.12.13",
-    "webpack-dev-middleware": "1.6.1",
     "webpack-dev-server": "1.14.1",
-    "webpack-merge": "0.7.3",
-    "writefile": "0.2.8"
+    "webpack-merge": "0.7.3"
   },
   "dependencies": {
     "body-parser": "1.15.0",

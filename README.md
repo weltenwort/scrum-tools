@@ -8,24 +8,35 @@ npm install
 ```
 
 If you haven't done so yet, install Elm globally:
+
 ```
 npm install -g elm
 ```
 
 Install Elm's dependencies:
+
 ```
 elm package install
 ```
+
+
+## Build and watch for development:
+```
+npm run watch
+```
+
+* Get coding! The entry point file is `src/Main.elm` 
+
 
 ### Serve locally:
 ```
 npm start
 ```
+
 * Access app at `http://localhost:8081/`
-* Get coding! The entry point file is `src/Main.elm` 
 
 
-## Build & bundle for prod:
+## Build & bundle for production:
 ```
 npm run build
 ```

@@ -1,5 +1,6 @@
 {
     "address": "::1",
     "port": 8081,
-    "retrospectives_db": "../retrospectives.db"
+    "retrospectives_db": "../retrospectives.db",
+    "assets_directory": "../dist"
 }

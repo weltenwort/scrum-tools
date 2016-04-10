@@ -2,20 +2,10 @@ var webpack           = require( 'webpack' );
 var merge             = require( 'webpack-merge' );
 var autoprefixer      = require( 'autoprefixer' );
 var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
-var swig              = require( 'swig' );        // templating lib for generating index.html
-var writefile         = require( 'writefile' );   // safer Node file writer (creates folders if not existing)
-
-console.log( 'WEBPACK GO!');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // detemine build env
 var TARGET_ENV = process.env.npm_lifecycle_event === 'build' ? 'prod' : 'dev';
-
-// generate HTML for index page (based on desired env)
-var indexTemplate = swig.compileFile('./src/index.html');
-var indexHtml     = indexTemplate( { env: TARGET_ENV } );
-
-// write out index.html to dist/
-writefile( './dist/index.html', indexHtml );
 
 // common webpack config
 var commonConfig = {
@@ -33,11 +23,6 @@ var commonConfig = {
 
   module: {
     loaders: [
-      {
-        test:    /\.html$/,
-        exclude: /node_modules/,
-        loader:  'file?name=[name].[ext]'
-      },
       {
         test:    /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
@@ -57,12 +42,27 @@ var commonConfig = {
         /\.elm$/,
         /socket.io-client\/socket.io.js$/
     ]
-  }
+  },
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      inject: false,
+      template: 'node_modules/html-webpack-template/index.ejs',
+
+      appMountId: 'main',
+      title: 'Scrum Tools',
+      window: {
+        env: {
+          elmMountId: 'main'
+        }
+      }
+    })
+  ]
 }
 
 // additional webpack settings for local env (when invoked by 'npm start')
 if ( TARGET_ENV === 'dev' ) {
-  console.log( 'Serving locally...');
+  console.log( 'Building for development...');
 
   module.exports = merge( commonConfig, {
 
@@ -92,7 +92,7 @@ if ( TARGET_ENV === 'dev' ) {
 
 // additional webpack settings for prod env (when invoked via 'npm run build')
 if ( TARGET_ENV === 'prod' ) {
-  console.log( 'Building for prod...');
+  console.log( 'Building for production...');
 
   module.exports = merge( commonConfig, {
     module: {
