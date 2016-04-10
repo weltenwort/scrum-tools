@@ -1,6 +1,9 @@
 module Retro.Action where
 
+import Retro.Model
+
 
 type Action
-    = Create String
-    | AddActivity String
+    = NoOp
+    | Create Retro.Model.Id
+    | AddActivity Retro.Model.Id String

@@ -2,4 +2,4 @@ module Pages.Retro.Action where
 
 
 type Action
-    = AddActivity
+    = AddActivity String

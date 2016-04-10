@@ -1,5 +1,6 @@
 module Retro.Update where
 
+import Dict
 import Effects exposing (Effects)
 import Response exposing (Response)
 
@@ -8,28 +9,36 @@ import Retro.Action
 import Retro.Model
 
 
-type alias ActivityModel = Activity.Model.Model
-type alias RetroModel = Maybe Retro.Model.Model
+type alias ActivityId = Activity.Model.Id
+type alias RetroModel = Retro.Model.Collection
 type alias RetroAction = Retro.Action.Action
 type alias RetroResponse = Response RetroModel RetroAction
 
 
 update : RetroAction -> RetroModel -> RetroResponse
-update action maybeRetro =
+update action retros =
     case action of
-        Retro.Action.Create id ->
-            Retro.Model.initial id
-                |> Response.withNone
-                |> Response.mapModel Just
-
-        Retro.Action.AddActivity id ->
-            maybeRetro
-                |> Maybe.map (addActivity (Activity.Model.initial id))
+        Retro.Action.Create retroId ->
+            retros
+                |> Dict.update
+                    retroId
+                    (\maybeRetro -> Maybe.oneOf [maybeRetro, Just (Retro.Model.initial retroId)])
                 |> Response.withNone
 
+        Retro.Action.AddActivity retroId activityId ->
+            retros
+                |> Dict.update
+                    retroId
+                    (Maybe.map (addActivity activityId))
+                |> Response.withNone
 
-addActivity : ActivityModel -> Retro.Model.Model -> Retro.Model.Model
-addActivity activity retro =
+        Retro.Action.NoOp ->
+            retros
+                |> Response.withNone
+
+
+addActivity : ActivityId -> Retro.Model.Model -> Retro.Model.Model
+addActivity activityId retro =
     { retro
-    | activities = activity :: retro.activities
+    | activityIds = activityId :: retro.activityIds
     }

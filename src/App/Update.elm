@@ -5,6 +5,7 @@ import Effects
 import Effects.Extra.Infix exposing ((:>))
 import Response exposing (Response)
 
+import Activity.Action
 import App.Action
 import App.Model
 import App.Router
@@ -36,45 +37,88 @@ init randomSeed =
 
 update : AppAction -> AppModel -> AppResponse
 update action model =
-    let
-        createRetro = Pages.NoRetro.Update.CreateRetro
-        addActivity = Pages.Retro.Action.AddActivity
-    in
-        case action of
-            -- Route Actions
-            App.Action.Route (route, _) ->
-                {model | route = route}
-                    |> Response.withNone
-            App.Action.Navigation path ->
-                model
-                    |> Response.withEffects (path |> App.Router.navigateTo |> Effects.map App.Action.Hop)
+    case action of
+        -- Route Actions
+        App.Action.Route (route, _) ->
+            {model | route = route}
+                |> Response.withNone
+        App.Action.Navigation path ->
+            model
+                |> Response.withEffects
+                    (  path
+                    |> App.Router.navigateTo
+                    |> Effects.map App.Action.Hop
+                    )
 
-            -- Service Actions
-            App.Action.Service (App.Action.Retro retroAction) ->
-                Retro.Update.update retroAction model.retro
-                    |> Response.mapModel (\retro -> { model | retro = retro })
-                    |> Response.mapEffects (App.Action.Retro >> App.Action.Service)
-            App.Action.Service (App.Action.Id idAction) ->
-                Id.Update.update idAction model.id
-                    |> Response.mapModel (\id -> { model | id = id })
-                    |> Response.mapEffects (App.Action.Id >> App.Action.Service)
+        -- Service Actions
+        App.Action.Service serviceAction ->
+            updateService serviceAction model
 
-            -- Page Actions
-            App.Action.Page (App.Action.NoRetroPage createRetro) ->
-                model
-                    |> Response.withNone
-                    :> update (Retro.Action.Create model.id.current |> App.Action.Retro |> App.Action.Service)
-                    :> update (Id.Action.Generate |> App.Action.Id |> App.Action.Service)
-                    :> update ("/retro/" ++ model.id.current |> App.Action.Navigation)
-            App.Action.Page (App.Action.RetroPage addActivity) ->
-                model
-                    |> Response.withNone
-                    :> update (Retro.Action.AddActivity model.id.current |> App.Action.Retro |> App.Action.Service)
-                    :> update (Id.Action.Generate |> App.Action.Id |> App.Action.Service)
+        -- Page Actions
+        App.Action.Page pageAction ->
+            updatePage pageAction model
 
-            _ ->
-                model
-                    |> Response.withNone
+        _ ->
+            model
+                |> Response.withNone
+
+
+updateService : App.Action.ServiceAction -> AppModel -> AppResponse
+updateService action model =
+    case action of
+        App.Action.RetroService retroAction ->
+            Retro.Update.update retroAction model.retros
+                |> Response.mapModel (\retros -> { model | retros = retros })
+                |> Response.mapEffects (App.Action.RetroService >> App.Action.Service)
+
+        App.Action.IdService idAction ->
+            Id.Update.update idAction model.id
+                |> Response.mapModel (\id -> { model | id = id })
+                |> Response.mapEffects (App.Action.IdService >> App.Action.Service)
+
+        _ ->
+            model
+                |> Response.withNone
+
+
+
+updatePage : App.Action.PageAction -> AppModel -> AppResponse
+updatePage action model =
+    case action of
+        App.Action.NoRetroPage (Pages.NoRetro.Update.CreateRetro) ->
+            model
+                |> update
+                    (  Retro.Action.Create model.id.current
+                    |> App.Action.RetroService
+                    |> App.Action.Service
+                    )
+                :> update
+                    (  Id.Action.Generate
+                    |> App.Action.IdService
+                    |> App.Action.Service
+                    )
+                :> update
+                    (  "/retro/" ++ model.id.current
+                    |> App.Action.Navigation
+                    )
+
+        App.Action.RetroPage (Pages.Retro.Action.AddActivity retroId) ->
+            model
+                |> update
+                    (  Retro.Action.AddActivity retroId model.id.current
+                    |> App.Action.RetroService
+                    |> App.Action.Service
+                    )
+                :> update
+                    (  Activity.Action.Create model.id.current
+                    |> App.Action.ActivityService
+                    |> App.Action.Service
+                    )
+                :> update
+                    (  Id.Action.Generate
+                    |> App.Action.IdService
+                    |> App.Action.Service
+                    )
 
 
 loggedUpdate : AppAction -> AppModel -> AppResponse

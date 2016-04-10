@@ -1,20 +1,23 @@
 module App.Model where
 
-import App.Router as App exposing (Route)
-import Id.Model as Id exposing (Model, initialModel)
-import Retro.Model as Retro exposing (Model)
+import Activity.Model
+import App.Router
+import Id.Model
+import Retro.Model
 
 
 type alias Model =
-    { id: Id.Model
-    , retro : Maybe Retro.Model
-    , route : App.Route
+    { activities : Activity.Model.Collection
+    , id : Id.Model.Model
+    , retros : Retro.Model.Collection
+    , route : App.Router.Route
     }
 
 
 initial : Model
 initial =
-    { id = Id.initialModel
-    , retro = Nothing
-    , route = App.NotFound
+    { activities = Activity.Model.initialCollection 
+    , id = Id.Model.initialModel
+    , retros = Retro.Model.initialCollection
+    , route = App.Router.NotFound
     }
