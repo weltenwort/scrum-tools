@@ -1,3 +1,5 @@
+/* @flow */
+
 import path from 'path';
 
 import bodyParser from 'body-parser';
@@ -9,11 +11,11 @@ import morgan from 'morgan';
 import NeDB from 'nedb';
 import socketio from 'feathers-socketio';
 
-const CONFIG_DIRECTORY = (process.env.ST_CONFIG_DIRECTORY
+const CONFIG_DIRECTORY: string = (process.env.ST_CONFIG_DIRECTORY
   ? process.env.ST_CONFIG_DIRECTORY
   : path.join(__dirname, '..')
 );
-const isProductionEnv = (app) => app.get('env') === 'production';
+const isProductionEnv = (app: FeathersApp): boolean => app.get('env') === 'production';
 
 const app = feathers()
   .configure(configuration(CONFIG_DIRECTORY))
@@ -43,7 +45,7 @@ const server = app.listen(
   app.get('address'),
   () => {
     const addressInfo = server.address();
-    const address = (addressInfo.family === 'IPv6';
+    const address: string = (addressInfo.family === 'IPv6'
       ? `[${addressInfo.address}]`
       : addressInfo.address
     );

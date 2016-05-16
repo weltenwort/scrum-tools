@@ -1,3 +1,9 @@
-require('./styles/app.css');
+/* @flow */
+declare var env: {
+  appMountId: string
+}
 
-var target = document.getElementById(env.appMountId);
+// $FlowIgnore
+import './styles/app.css';
+
+const target: HTMLElement = document.getElementById(env.appMountId);
